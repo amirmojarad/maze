@@ -2,10 +2,10 @@
 
 Maze AI Project
 
-## contributors
+## Contributors
 
-* [amir mojarad](https://github.com/amirmojarad)
-* [amir hosein arabhaji](https://github.com/AmirhoseinArabhaji)
+* [Amir Mojarad](https://github.com/amirmojarad)
+* [Amirhosein Arabhaji](https://github.com/AmirhoseinArabhaji)
 
 ## Input File
 ```bash
@@ -17,7 +17,7 @@ Maze AI Project
 S--%-
 ```
 
-* `% -> break`
-* `- -> free`
+* `% -> wall`
+* `- -> path`
 * `S -> start`
 * `G -> end`
