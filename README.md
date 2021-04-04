@@ -6,3 +6,21 @@ Maze AI Project
 
 * [amir mojarad](https://github.com/amirmojarad)
 * [amir hosein arabhaji](https://github.com/AmirhoseinArabhaji)
+
+## Input File
+`5,5
+
+%%%%G
+
+--%%-
+
+%-%--
+
+%%--%
+
+S--%-`
+
+* % -> break
+* - -> free
+* S -> start
+* G -> end
