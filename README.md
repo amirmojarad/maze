@@ -10,15 +10,10 @@ Maze AI Project
 ## Input File
 ```bash
 5,5
-
 %%%%G
-
 --%%-
-
 %-%--
-
 %%--%
-
 S--%-
 ```
 
