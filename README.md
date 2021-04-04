@@ -8,7 +8,8 @@ Maze AI Project
 * [amir hosein arabhaji](https://github.com/AmirhoseinArabhaji)
 
 ## Input File
-`5,5
+```bash
+5,5
 
 %%%%G
 
@@ -18,9 +19,10 @@ Maze AI Project
 
 %%--%
 
-S--%-`
+S--%-
+```
 
-* % -> break
-* - -> free
-* S -> start
-* G -> end
+* `% -> break`
+* `- -> free`
+* `S -> start`
+* `G -> end`
