@@ -21,3 +21,13 @@ S--%-
 * `- -> path`
 * `S -> start`
 * `G -> end`
+
+### Project ToDo
+
+* ~~`File Reading and making 2D Array`~~
+* `Generate Graph`
+* `Calculate h() and g()`
+* `Algorithm implementation`
+* `GUI Components`
+* `Algorithm Test`
+* `Documentation`
