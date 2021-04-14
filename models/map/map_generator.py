@@ -29,3 +29,7 @@ class MapGenerator:
             index += 1
         maze = MazeMap(width, height, result_map)
         return maze
+
+
+f_reader = FileHandler()
+mg = MapGenerator(f_reader.getMap())

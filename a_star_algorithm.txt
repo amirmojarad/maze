@@ -36,3 +36,12 @@
 
     e) push q on the closed list
     end (while loop)
+
+
+    HOW TO FIND h() ?
+        - Diagonal Distance:
+            h = max { abs(current_cell.x – goal.x),
+                      abs(current_cell.y – goal.y) }
+        - When to use this heuristic? – When we are allowed to move in eight directions only (similar to a move of a King in Chess)
+
+
