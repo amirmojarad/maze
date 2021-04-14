@@ -1,35 +1,115 @@
-""""
-MapGenerator
-    this class generate maze_map
-"""
-from models.map.map import MazeMap
-
-
 class MapGenerator:
-    def __init__(self, raw_map) -> None:
-        super().__init__()
-        self._raw_map = raw_map
-        self._lines = []
+    """"
+    MapGenerator
+        this class generate maze_map
+    """
 
-    def _get_lines(self):
-        return self._raw_map.split("\n")
+    class Node:
+        """
+        keeps position and neighbors of a node
+        """
+        def __init__(self, position):
+            # tuple: (y ,x)
+            #     height, width
+            self.position = position
+            #                 above/right/below/left
+            self.neighbors = [None, None, None, None]
 
-    def get_map(self):
-        result_map = [[] for x in range(0, 5)]
-        self._lines = self._get_lines()
-        # get width of map in first character of raw map
-        width = self._lines[0][0]
-        # get width of map in third character of raw map
-        height = self._lines[0][2]
-        # then remove first line (WIDTH,HEIGHT)
-        self._lines.pop(0)
-        index = 0
-        for l in self._lines:
-            result_map[index] = list(l)
-            index += 1
-        maze = MazeMap(width, height, result_map)
-        return maze
+    def __init__(self, raw_map):
+        self.node_count = 0
+        lines = raw_map.split()
 
+        self.width = len(lines[0])
+        self.height = len(lines)
 
-f_reader = FileHandler()
-mg = MapGenerator(f_reader.getMap())
+        self.start = None
+        self.end = None
+
+        # making graph
+        top_nodes = [None] * self.width
+
+        # find end node
+        for x in range(1, self.width - 1):
+            if lines[0][x] == 'G':
+                print('end x: ', x)  # TODO DEBUG
+                self.end = MapGenerator.Node((0, x))
+                top_nodes[x] = self.end
+                self.node_count += 1
+                break
+
+        # find middle nodes
+        for y in range(1, self.height - 1):
+            # set previous, current and next node status
+            prv = False
+            cur = False
+            # check if next node is path or not
+            nxt = True if lines[y][1] == '-' else False
+
+            # keep left node details
+            leftnode = None
+
+            for x in range(1, self.width - 1):
+                print('y, x:', y, x)  # TODO DEBUG
+                # move prev, current and next onwards
+                prv = cur
+                cur = nxt
+                nxt = True if lines[y][x + 1] == '-' else False
+
+                n = None
+
+                if cur == False:
+                    # current on wall - continue
+                    continue
+
+                if prv == True:
+                    if nxt == True:
+                        # create node if paths above or below
+                        if lines[y - 1][x] == '-' or lines[y + 1][x] == '-':
+                            n = MapGenerator.Node((y, x))
+                            leftnode.neighbors[1] = n
+                            n.neighbors[3] = leftnode
+                            leftnode = n
+                    else:
+                        # create node at end of hallway
+                        n = MapGenerator.Node((y, x))
+                        leftnode.neighbors[1] = n
+                        n.neighbors[3] = leftnode
+                        leftnode = None
+                else:
+                    if nxt == True:
+                        # Create node at start of hallway
+                        n = MapGenerator.Node((y, x))
+                        leftnode = n
+                    else:
+                        # Create node only if in dead end
+                        if lines[y - 1][x] == '%' or lines[y + 1][x] == '%':
+                            n = MapGenerator.Node((y, x))
+
+                # if node was initialized
+                if n is not None:
+                    print('node', n.position)  # TODO DEBUG
+                    # Clear above, connect to waiting top node
+                    if lines[y - 1][x] == '-' or lines[y - 1][x] == 'G':
+                        t = top_nodes[x]
+                        t.neighbors[2] = n
+                        n.neighbors[0] = t
+
+                    # If clear below, put this new node in the top row for the next connection
+                    if lines[y + 1][x] == '-' or lines[y + 1][x] == 'S':
+                        top_nodes[x] = n
+                    else:
+                        top_nodes[x] = None
+
+                    self.node_count += 1
+
+        # find start node
+        y = self.height - 1
+        for x in range(1, self.width - 1):
+            if lines[y][x] == 'S':
+                print('start', x)
+                self.start = MapGenerator.Node((self.height - 1, x))
+                t = top_nodes[x]
+                t.neighbors[2] = self.end
+                self.start.neighbors[0] = t
+                self.node_count += 1
+                break

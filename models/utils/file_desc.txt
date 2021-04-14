@@ -5,8 +5,8 @@
 %%--%
 S--%-
 
-% -> break
-- -> free
+% -> wall
+- -> path
 S -> start
 G -> end
 
