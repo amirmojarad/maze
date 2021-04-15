@@ -52,7 +52,6 @@ class MapGenerator:
             leftnode = None
 
             for x in range(1, self.width - 1):
-                # print('y, x:', y, x)  # TODO DEBUG
                 # move prev, current and next onwards
                 prv = cur
                 cur = nxt
@@ -94,7 +93,6 @@ class MapGenerator:
 
                 # if node was initialized
                 if n is not None:
-                    print('node', n.Position)  # TODO DEBUG
                     # Clear above, connect to waiting top node
                     if lines[y - 1][x] == '-' or lines[y - 1][x] == 'G':
                         t = top_nodes[x]

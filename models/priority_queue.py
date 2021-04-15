@@ -3,7 +3,7 @@ import itertools
 
 from FibonacciHeap import FibHeap
 import heapq
-from queue import Queue
+import queue
 
 
 class PriorityQueue():
@@ -90,7 +90,7 @@ class HeapPQ(PriorityQueue):
 
 class QueuePQ(PriorityQueue):
     def __init__(self):
-        self.pq = Queue.PriorityQueue()
+        self.pq = queue.PriorityQueue()
         self.removed = set()
         self.count = 0
 

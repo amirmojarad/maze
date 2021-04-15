@@ -13,23 +13,25 @@ def solve(maze):
     end = maze.end
     endpos = end.Position
 
-    # Visited holds true/false on whether a node has been seen already. Used to stop us returning to nodes multiple times
+    # Visited holds true/false on whether a node has been seen already.
+    # Used to stop us returning to nodes multiple times
     visited = [False] * total
     # Previous holds a link to the previous node in the path. Used at the end for reconstructing the route
     prev = [None] * total
 
-    # Distances holds the distance to any node taking the best known path so far. Better paths replace worse ones as we find them.
+    # Distances holds the distance to any node taking the best known path so far.
+    # Better paths replace worse ones as we find them.
     # We start with all distances at infinity
     infinity = float("inf")
     distances = [infinity] * total
 
     # The priority queue. There are multiple implementations in priority_queue.py
-    # unvisited = FibHeap()
-    unvisited = HeapPQ()
+    unvisited = HeapPQ()  # main
     # unvisited = FibPQ()
     # unvisited = QueuePQ()
 
-    # This index holds all priority queue nodes as they are created. We use this to decrease the key of a specific node when a shorter path is found.
+    # This index holds all priority queue nodes as they are created.
+    # We use this to decrease the key of a specific node when a shorter path is found.
     # This isn't hugely memory efficient, but likely to be faster than a dictionary or similar.
     nodeindex = [None] * total
 
@@ -39,7 +41,7 @@ def solve(maze):
     nodeindex[start.Position[0] * width + start.Position[1]] = startnode
     unvisited.insert(startnode)
 
-    # Zero nodes visited, and not completed yet.
+    # save visited nodes
     count = 0
     completed = False
 
@@ -79,12 +81,14 @@ def solve(maze):
                     # https://en.wikipedia.org/wiki/Taxicab_geometry
                     remaining = abs(vpos[0] - endpos[0]) + abs(vpos[1] - endpos[1])
 
-                    # Notice that we don't include f cost in this first check. We want to know that the path *to* our node V is shortest
+                    # Notice that we don't include f cost in this first check.
+                    # We want to know that the path *to* our node V is shortest
                     if newdistance < distances[vposindex]:
                         vnode = nodeindex[vposindex]
 
                         if vnode is None:
-                            # V goes into the priority queue with a cost of g + f. So if it's moving closer to the end, it'll get higher
+                            # V goes into the priority queue with a cost of g + f.
+                            # So if it's moving closer to the end, it'll get higher
                             # priority than some other nodes. The order we visit nodes is a trade-off between a short path, and moving
                             # closer to the goal.
                             vnode = FibHeap.Node(newdistance + remaining, v)
@@ -94,7 +98,8 @@ def solve(maze):
                             distances[vposindex] = newdistance
                             prev[vposindex] = u
                         else:
-                            # As above, we decrease the node since we've found a new path. But we include the f cost, the distance remaining.
+                            # As above, we decrease the node since we've found a new path.
+                            # But we include the f cost, the distance remaining.
                             unvisited.decreasekey(vnode, newdistance + remaining)
                             # The distance *to* the node remains just g, no f included.
                             distances[vposindex] = newdistance
@@ -102,14 +107,19 @@ def solve(maze):
 
         visited[uposindex] = True
 
-    # We want to reconstruct the path. We start at end, and then go prev[end] and follow all the prev[] links until we're back at the start
+    # We want to reconstruct the path.
+    # We start at end, and then go prev[end] and follow all the prev[] links until we're back at the start
     from collections import deque
 
     path = deque()
     current = end
     while current is not None:
         path.appendleft(current)
-        x = current.Position[0] * width + current.Position[1]
         current = prev[current.Position[0] * width + current.Position[1]]
 
-    return [path, [count, len(path), completed]]
+    return {
+        'path': path,
+        'node_visited': count,
+        'path_length': len(path),
+        'completed': completed
+    }
