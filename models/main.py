@@ -8,7 +8,7 @@ import time
 def main():
     # reading maze from file
     print('Loading file...')
-    with open('examples/hundred.txt') as file:
+    with open('examples/example.txt') as file:
         text_maze = file.read()
     print('File loaded')
 
