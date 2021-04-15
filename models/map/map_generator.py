@@ -11,9 +11,12 @@ class MapGenerator:
         def __init__(self, position):
             # tuple: (y ,x)
             #     height, width
-            self.position = position
+            self.Position = position
             #                 above/right/below/left
-            self.neighbors = [None, None, None, None]
+            self.Neighbours = [None, None, None, None]
+
+        def __lt__(self, other) -> bool:
+            return True
 
     def __init__(self, raw_map):
         self.node_count = 0
@@ -66,14 +69,14 @@ class MapGenerator:
                         # create node if paths above or below
                         if lines[y - 1][x] == '-' or lines[y + 1][x] == '-':
                             n = MapGenerator.Node((y, x))
-                            leftnode.neighbors[1] = n
-                            n.neighbors[3] = leftnode
+                            leftnode.Neighbours[1] = n
+                            n.Neighbours[3] = leftnode
                             leftnode = n
                     else:
                         # create node at end of hallway
                         n = MapGenerator.Node((y, x))
-                        leftnode.neighbors[1] = n
-                        n.neighbors[3] = leftnode
+                        leftnode.Neighbours[1] = n
+                        n.Neighbours[3] = leftnode
                         leftnode = None
                 else:
                     if nxt == True:
@@ -87,12 +90,12 @@ class MapGenerator:
 
                 # if node was initialized
                 if n is not None:
-                    print('node', n.position)  # TODO DEBUG
+                    print('node', n.Position)  # TODO DEBUG
                     # Clear above, connect to waiting top node
                     if lines[y - 1][x] == '-' or lines[y - 1][x] == 'G':
                         t = top_nodes[x]
-                        t.neighbors[2] = n
-                        n.neighbors[0] = t
+                        t.Neighbours[2] = n
+                        n.Neighbours[0] = t
 
                     # If clear below, put this new node in the top row for the next connection
                     if lines[y + 1][x] == '-' or lines[y + 1][x] == 'S':
@@ -109,7 +112,7 @@ class MapGenerator:
                 print('start', x)
                 self.start = MapGenerator.Node((self.height - 1, x))
                 t = top_nodes[x]
-                t.neighbors[2] = self.end
-                self.start.neighbors[0] = t
+                t.Neighbours[2] = self.end
+                self.start.Neighbours[0] = t
                 self.node_count += 1
                 break
