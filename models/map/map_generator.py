@@ -33,6 +33,7 @@ class MapGenerator:
 
         # find end node
         for x in range(1, self.width - 1):
+            # if node is the end node
             if lines[0][x] == 'G':
                 self.end = MapGenerator.Node((0, x))
                 top_nodes[x] = self.end
@@ -67,10 +68,7 @@ class MapGenerator:
                     if nxt == True:
                         # PATH PATH PATH
                         # create node if paths above or below
-                        if lines[y - 1][x] == '-'\
-                                or lines[y + 1][x] == '-'\
-                                or lines[y - 1][x] == 'G'\
-                                or lines[y + 1][x] == 'S':
+                        if lines[y - 1][x] == '-' or lines[y + 1][x] == '-' or lines[y - 1][x] == 'G' or lines[y + 1][x] == 'S':
                             n = MapGenerator.Node((y, x))
                             leftnode.Neighbours[1] = n
                             n.Neighbours[3] = leftnode
@@ -117,7 +115,7 @@ class MapGenerator:
             if lines[y][x] == 'S':
                 self.start = MapGenerator.Node((self.height - 1, x))
                 t = top_nodes[x]
-                t.Neighbours[2] = self.end
+                t.Neighbours[2] = self.start
                 self.start.Neighbours[0] = t
                 self.node_count += 1
                 break
