@@ -8,16 +8,18 @@ import time
 def main():
     # reading maze from file
     print('Loading file...')
-    with open('examples/example.txt') as file:
+    with open('examples/hundred.txt') as file:
         text_maze = file.read()
     print('File loaded')
 
+    # generate graph from raw text in file
     print('Creating maze graph')
     t1 = time.time()
     maze_graph = map_generator.MapGenerator(text_maze)
     t2 = time.time()
     print('Graph created in:', t2 - t1)
 
+    # solve and fine path in maze by a* algorithm
     t1 = time.time()
     result = astar.solve(maze_graph)
     t2 = time.time()
