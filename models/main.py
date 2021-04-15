@@ -1,6 +1,7 @@
 from map.map_generator import MapGenerator
 import astar
 
+
 def main():
     # reading maze from file
     print('Loading file...')
@@ -12,11 +13,10 @@ def main():
     maze_graph = MapGenerator(text_maze)
     print('Graph created')
 
-    # TODO solve
-
     solved = astar.solve(maze_graph)
 
-    print(solved)
+    print(solved[1])
+    print(solved[0])
 
 
 if __name__ == '__main__':

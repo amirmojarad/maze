@@ -96,8 +96,9 @@ def solve(maze):
 
     path = deque()
     current = end
-    while (current != None):
+    while current is not None:
         path.appendleft(current)
+        x = current.Position[0] * width + current.Position[1]
         current = prev[current.Position[0] * width + current.Position[1]]
 
     return [path, [count, len(path), completed]]

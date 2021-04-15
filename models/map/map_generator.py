@@ -3,7 +3,6 @@ class MapGenerator:
     MapGenerator
         this class generate maze_map
     """
-
     class Node:
         """
         keeps position and neighbors of a node
@@ -29,12 +28,12 @@ class MapGenerator:
         self.end = None
 
         # making graph
+        # saving top nodes of each hallway
         top_nodes = [None] * self.width
 
         # find end node
         for x in range(1, self.width - 1):
             if lines[0][x] == 'G':
-                print('end x: ', x)  # TODO DEBUG
                 self.end = MapGenerator.Node((0, x))
                 top_nodes[x] = self.end
                 self.node_count += 1
@@ -52,7 +51,7 @@ class MapGenerator:
             leftnode = None
 
             for x in range(1, self.width - 1):
-                print('y, x:', y, x)  # TODO DEBUG
+                # print('y, x:', y, x)  # TODO DEBUG
                 # move prev, current and next onwards
                 prv = cur
                 cur = nxt
@@ -66,13 +65,18 @@ class MapGenerator:
 
                 if prv == True:
                     if nxt == True:
+                        # PATH PATH PATH
                         # create node if paths above or below
-                        if lines[y - 1][x] == '-' or lines[y + 1][x] == '-':
+                        if lines[y - 1][x] == '-'\
+                                or lines[y + 1][x] == '-'\
+                                or lines[y - 1][x] == 'G'\
+                                or lines[y + 1][x] == 'S':
                             n = MapGenerator.Node((y, x))
                             leftnode.Neighbours[1] = n
                             n.Neighbours[3] = leftnode
                             leftnode = n
                     else:
+                        # PATH PATH WALL
                         # create node at end of hallway
                         n = MapGenerator.Node((y, x))
                         leftnode.Neighbours[1] = n
@@ -80,10 +84,12 @@ class MapGenerator:
                         leftnode = None
                 else:
                     if nxt == True:
+                        # WALL PATH PATH
                         # Create node at start of hallway
                         n = MapGenerator.Node((y, x))
                         leftnode = n
                     else:
+                        # WALL PATH WALL
                         # Create node only if in dead end
                         if lines[y - 1][x] == '%' or lines[y + 1][x] == '%':
                             n = MapGenerator.Node((y, x))
@@ -109,7 +115,6 @@ class MapGenerator:
         y = self.height - 1
         for x in range(1, self.width - 1):
             if lines[y][x] == 'S':
-                print('start', x)
                 self.start = MapGenerator.Node((self.height - 1, x))
                 t = top_nodes[x]
                 t.Neighbours[2] = self.end
