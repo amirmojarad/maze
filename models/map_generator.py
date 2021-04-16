@@ -27,32 +27,33 @@ class MapGenerator:
         self.start = None
         self.end = None
 
-        # making graph
-        # saving top nodes of each hallway
+        # Making graph
+        # We make a node at each intersection. This is one of the best and efficient way to make a graph out of maze
+        # Saving top nodes of each hallway
         top_nodes = [None] * self.width
 
-        # find end node
+        # Find end node
         for x in range(1, self.width - 1):
-            # if node is the end node
+            # If node is the end node
             if lines[0][x] == 'G':
                 self.end = MapGenerator.Node((0, x))
                 top_nodes[x] = self.end
                 self.node_count += 1
                 break
 
-        # find middle nodes
+        # Find middle nodes
         for y in range(1, self.height - 1):
-            # set previous, current and next node status
+            # Set previous, current and next node status
             prv = False
             cur = False
-            # check if next node is path or not
+            # Check if next node is path or not
             nxt = True if lines[y][1] == '-' else False
 
-            # keep left node details
+            # For saving left node
             leftnode = None
 
             for x in range(1, self.width - 1):
-                # move prev, current and next onwards
+                # Move prev, current and next onwards
                 prv = cur
                 cur = nxt
                 nxt = True if lines[y][x + 1] == '-' else False
@@ -60,13 +61,13 @@ class MapGenerator:
                 n = None
 
                 if cur == False:
-                    # current on wall - continue
+                    # Current on wall - continue
                     continue
 
                 if prv == True:
                     if nxt == True:
                         # PATH PATH PATH
-                        # create node if paths above or below
+                        # Create node if paths above or below
                         if lines[y - 1][x] == '-' or lines[y + 1][x] == '-' or lines[y - 1][x] == 'G' or lines[y + 1][x] == 'S':
                             n = MapGenerator.Node((y, x))
                             leftnode.Neighbours[1] = n
@@ -74,7 +75,7 @@ class MapGenerator:
                             leftnode = n
                     else:
                         # PATH PATH WALL
-                        # create node at end of hallway
+                        # Create node at end of hallway
                         n = MapGenerator.Node((y, x))
                         leftnode.Neighbours[1] = n
                         n.Neighbours[3] = leftnode
@@ -91,7 +92,7 @@ class MapGenerator:
                         if lines[y - 1][x] == '%' or lines[y + 1][x] == '%':
                             n = MapGenerator.Node((y, x))
 
-                # if node was initialized
+                # If node was initialized
                 if n is not None:
                     # Clear above, connect to waiting top node
                     if lines[y - 1][x] == '-' or lines[y - 1][x] == 'G':
@@ -107,7 +108,7 @@ class MapGenerator:
 
                     self.node_count += 1
 
-        # find start node
+        # Find start node
         y = self.height - 1
         for x in range(1, self.width - 1):
             if lines[y][x] == 'S':
